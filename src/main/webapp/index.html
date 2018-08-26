@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--第一步：引入Javascript / CSS （CDN）-->
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="css/tablestyle.css">
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8"><span></span></div>
+        <div class="col-md-4">
+            <button>增加</button>
+            <button>删除</button>
+        </div>
+    </div>
+    <!--第二步：添加如下 HTML 代码-->
+    <div style="width: 800px">
+        <table id="table_id_example" class="display">
+            <thead>
+            <tr>
+                <th>UserName</th>
+                <th>Birth</th>
+                <th>Picture</th>
+                <th>Sex</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>
+<script>
+    $(document).ready( function () {
+        $('#table_id_example').DataTable({
+            "autoWidth": false,
+            // "info": true, //左下角的信息显示
+            // "lengthChange": true,   //选择分页数量的启动
+            // "ordering": true, //排序启动
+            // "paging": true, //本地分页
+            // "processing": true, //排序进度条
+            // "scrollY": "200px", //垂直滚动
+            // "scrollCollapse": true,
+            // "searching": true, //本地搜索
+            // "stateSave": true, //保持分页，翻页的状态
+            "orderCellsTop": true,
+            // "orderFixed": {
+            //     "pre": [ 1, 'desc' ]
+            // },  //指定按什么排序
+            "order": [[ 1, 'desc' ]], //初始化排序
+            // "caseInsensitive": false, //搜索大小写不敏感
+             "serverSide" : true,//服务器分页
+            "oLanguage" : {
+                "sProcessing" : "正在加载中......",
+                "sLengthMenu" : "每页显示 _MENU_ 条记录",
+                "sZeroRecords" : "没有数据！",
+                "sEmptyTable" : "表中无数据存在！",
+                "sInfo" : "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+                "sInfoEmpty" : "显示0到0条记录",
+                "sInfoFiltered" : "数据表中共为 _MAX_ 条记录",
+                "sSearch" : "搜索",
+                "oPaginate" : {
+                    "sFirst" : "首页",
+                    "sPrevious" : "上一页",
+                    "sNext" : "下一页",
+                    "sLast" : "末页"
+                }
+            },
+            ajax:{
+                url: 'http://localhost:9090/basecrud/user',
+                type: 'GET',
+                dataSrc:'data'
+            },
+            columns: [
+                { data: 'name' },
+                { data: 'birth' },
+                { data: 'picture' },
+                { data: 'sex' }
+            ],
+            "columnDefs":[
+                {
+                    "width":"25%",
+                    "targets":[0]
+                },
+                {
+                    "width":"25%",
+                    "searchable": false,
+                    "targets":[1]
+                },
+                {
+                    "width":"25%",
+                    "searchable": false,
+                    "orderable": false,
+                    "targets":[2],
+                    "data":"图片",
+                    "render":function (data,type,full) {
+                        return "<img src=\'"+data+"\'"+"/>"
+                    }
+                },
+                {
+                    "width":"25%",
+                    "targets":[3]
+                }
+            ]
+        });
+    } );
+</script>
+</html>
